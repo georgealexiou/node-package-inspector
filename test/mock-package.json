@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "react": "^17.0.1",
+    "moment": "^2.20.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.4",
+    "eslint": "^7.25.0",
+    "jest": "^27.2.0"
+  }
+}

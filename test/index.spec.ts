@@ -2,6 +2,9 @@ import { myPackage } from "../src";
 
 // This is from the src/index.ts file
 const PATH_TO_MOCK_PACKAGE = "../test/mock-package.json";
+const PATH_TO_MOCK__INVALID_PACKAGE =
+  "../test/mock-package-invalid-dependency.json";
+
 const FAKE_DATE = "2023-02-11T20:31:23.629Z";
 
 jest.mock("child_process", () => ({
@@ -45,6 +48,14 @@ describe("index", () => {
           currentVersionDate: new Date(FAKE_DATE),
         },
       ]);
+    });
+  });
+
+  describe("myPackage validation", () => {
+    it("should error when dependency is not valid semver", () => {
+      expect(() => myPackage(PATH_TO_MOCK__INVALID_PACKAGE)).toThrow(
+        "Invalid semver version"
+      );
     });
   });
 });

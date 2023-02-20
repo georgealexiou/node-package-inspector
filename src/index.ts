@@ -1,23 +1,20 @@
 import { execSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
+import {
+  DependencyObjectType,
+  PackageInfo,
+  packageJsonSchema,
+  PackageJsonType,
+} from "./types";
 const semver = require("semver");
 
-type PackageInfo = {
-  name: string;
-  isDevDependency: boolean;
-  currentVersion: string;
-  currentVersionDate: Date;
-  // latestVersion?: string;
-  // latestVersionDate?: Date;
-};
-
-const readJsonFile = (pathToPackage: string): any => {
+const readJsonFile = (pathToPackage: string): PackageJsonType => {
   const fileContent = fs.readFileSync(
     path.join(__dirname, pathToPackage),
     "utf8"
   );
-  return JSON.parse(fileContent);
+  return packageJsonSchema.parse(JSON.parse(fileContent));
 };
 
 const getReleaseDate = ({
@@ -26,7 +23,7 @@ const getReleaseDate = ({
 }: {
   packageName: string;
   version: string;
-}) => {
+}): Date => {
   const dateString = execSync(
     `npm view ${packageName}@${version} time.modified --json`,
     {
@@ -39,13 +36,13 @@ const getReleaseDate = ({
 const normalizeVersion = (version: string): string =>
   semver.coerce(version)?.version ?? "";
 
-const parseDependencies = (packageJson: any): PackageInfo[] => {
+const parseDependencies = (packageJson: PackageJsonType): PackageInfo[] => {
   const packages: PackageInfo[] = [];
   const parseDependencyArray = ({
     dependencies,
     isDevDependency,
   }: {
-    dependencies: [];
+    dependencies: DependencyObjectType;
     isDevDependency: boolean;
   }) =>
     Object.entries(dependencies).map(([name, version]) => ({
@@ -60,11 +57,11 @@ const parseDependencies = (packageJson: any): PackageInfo[] => {
 
   return packages.concat(
     parseDependencyArray({
-      dependencies: packageJson.dependencies,
+      dependencies: packageJson.dependencies ?? {},
       isDevDependency: false,
     }),
     parseDependencyArray({
-      dependencies: packageJson.devDependencies,
+      dependencies: packageJson.devDependencies ?? {},
       isDevDependency: false,
     })
   );

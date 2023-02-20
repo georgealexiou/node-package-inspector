@@ -1,15 +1,6 @@
-import { execSync } from "child_process";
 import { PackageInfo, PackageInfoBase } from "./types";
 import { parseDependencies, readJsonFile } from "./parser";
-
-const getReleaseDate = (packageName: string, version: string): Date => {
-  const dateString = execSync(
-    `npm view ${packageName}@${version} time.modified --json`,
-    { encoding: "utf-8" }
-  );
-  const sanitizedDateString = dateString.replace(/^"(.+)"\n$/, "$1");
-  return new Date(sanitizedDateString);
-};
+import { getReleaseDate, getLatestVersion } from "./npm";
 
 const getPackageInfos = (dependencies: PackageInfoBase[]): PackageInfo[] =>
   dependencies.map((dependency) => ({
@@ -18,8 +9,8 @@ const getPackageInfos = (dependencies: PackageInfoBase[]): PackageInfo[] =>
       dependency.name,
       dependency.currentVersion
     ),
-    latestVersion: "",
-    latestVersionDate: new Date(),
+    latestVersion: getLatestVersion(dependency.name),
+    latestVersionDate: getReleaseDate(dependency.name, "latest"),
   }));
 
 export const myPackage = (pathToPackage: string): PackageInfo[] => {

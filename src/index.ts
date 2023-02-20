@@ -4,6 +4,7 @@ import * as path from "path";
 import {
   DependencyObjectType,
   PackageInfo,
+  PackageInfoBase,
   packageJsonSchema,
   PackageJsonType,
 } from "./types";
@@ -36,23 +37,19 @@ const getReleaseDate = ({
 const normalizeVersion = (version: string): string =>
   semver.coerce(version)?.version ?? "";
 
-const parseDependencies = (packageJson: PackageJsonType): PackageInfo[] => {
-  const packages: PackageInfo[] = [];
+const parseDependencies = (packageJson: PackageJsonType): PackageInfoBase[] => {
+  const packages: PackageInfoBase[] = [];
   const parseDependencyArray = ({
     dependencies,
     isDevDependency,
   }: {
     dependencies: DependencyObjectType;
     isDevDependency: boolean;
-  }) =>
+  }): PackageInfoBase[] =>
     Object.entries(dependencies).map(([name, version]) => ({
       name,
       isDevDependency,
       currentVersion: normalizeVersion(version),
-      currentVersionDate: getReleaseDate({
-        packageName: name,
-        version: normalizeVersion(version),
-      }),
     }));
 
   return packages.concat(
@@ -67,10 +64,19 @@ const parseDependencies = (packageJson: PackageJsonType): PackageInfo[] => {
   );
 };
 
+const getPackageInfos = (dependencies: PackageInfoBase[]): PackageInfo[] =>
+  dependencies.map((dependency) => ({
+    ...dependency,
+    currentVersionDate: getReleaseDate({
+      packageName: dependency.name,
+      version: dependency.currentVersion,
+    }),
+  }));
+
 export const myPackage = (pathToPackage: string): PackageInfo[] => {
   const packageJson = readJsonFile(pathToPackage);
-  // extract name and currentVersion
   const parsedDependencies = parseDependencies(packageJson);
-  // iterate and fetch additional info
-  return parsedDependencies;
+  const packageInfos = getPackageInfos(parsedDependencies);
+  // TODO computeScores
+  return packageInfos;
 };

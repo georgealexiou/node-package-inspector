@@ -9,8 +9,8 @@ export type PackageInfoBase = {
 
 export type PackageInfo = PackageInfoBase & {
   currentVersionDate: Date;
-  // latestVersion: string;
-  // latestVersionDate: Date;
+  latestVersion: string;
+  latestVersionDate: Date;
 };
 
 const semverSchema = z.string().refine((value) => {

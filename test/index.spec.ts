@@ -2,6 +2,8 @@ import { myPackage } from "../src";
 
 // This is from the src/index.ts file
 const PATH_TO_MOCK_PACKAGE = "../test/mock-package.json";
+const PATH_TO_MOCK__INVALID_PACKAGE =
+  "../test/mock-package-invalid-dependency.json";
 
 describe("index", () => {
   describe("myPackage", () => {
@@ -15,6 +17,14 @@ describe("index", () => {
         { name: "eslint", isDevDependency: true, currentVersion: "^7.25.0" },
         { name: "jest", isDevDependency: true, currentVersion: "^27.2.0" },
       ]);
+    });
+  });
+
+  describe("myPackage validation", () => {
+    it("should error when dependency is not valid semver", () => {
+      expect(() => myPackage(PATH_TO_MOCK__INVALID_PACKAGE)).toThrow(
+        "Invalid semver version"
+      );
     });
   });
 });

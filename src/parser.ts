@@ -19,31 +19,19 @@ export const readJsonFile = (pathToPackage: string): PackageJsonType => {
   return packageJsonSchema.parse(JSON.parse(fileContent));
 };
 
+const parseDependencyArray = (
+  dependencies: DependencyObjectType,
+  isDevDependency: boolean
+): PackageInfoBase[] =>
+  Object.entries(dependencies).map(([name, version]) => ({
+    name,
+    isDevDependency,
+    currentVersion: normalizeVersion(version),
+  }));
+
 export const parseDependencies = (
   packageJson: PackageJsonType
-): PackageInfoBase[] => {
-  const packages: PackageInfoBase[] = [];
-  const parseDependencyArray = ({
-    dependencies,
-    isDevDependency,
-  }: {
-    dependencies: DependencyObjectType;
-    isDevDependency: boolean;
-  }): PackageInfoBase[] =>
-    Object.entries(dependencies).map(([name, version]) => ({
-      name,
-      isDevDependency,
-      currentVersion: normalizeVersion(version),
-    }));
-
-  return packages.concat(
-    parseDependencyArray({
-      dependencies: packageJson.dependencies ?? {},
-      isDevDependency: false,
-    }),
-    parseDependencyArray({
-      dependencies: packageJson.devDependencies ?? {},
-      isDevDependency: false,
-    })
-  );
-};
+): PackageInfoBase[] => [
+  ...parseDependencyArray(packageJson.dependencies ?? {}, false),
+  ...parseDependencyArray(packageJson.devDependencies ?? {}, false),
+];

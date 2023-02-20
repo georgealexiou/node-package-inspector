@@ -31,19 +31,19 @@ describe("index", () => {
         },
         {
           name: "typescript",
-          isDevDependency: false,
+          isDevDependency: true,
           currentVersion: "4.2.4",
           currentVersionDate: new Date(FAKE_DATE),
         },
         {
           name: "eslint",
-          isDevDependency: false,
+          isDevDependency: true,
           currentVersion: "7.25.0",
           currentVersionDate: new Date(FAKE_DATE),
         },
         {
           name: "jest",
-          isDevDependency: false,
+          isDevDependency: true,
           currentVersion: "27.2.0",
           currentVersionDate: new Date(FAKE_DATE),
         },

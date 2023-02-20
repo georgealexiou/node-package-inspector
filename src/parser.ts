@@ -33,5 +33,5 @@ export const parseDependencies = (
   packageJson: PackageJsonType
 ): PackageInfoBase[] => [
   ...parseDependencyArray(packageJson.dependencies ?? {}, false),
-  ...parseDependencyArray(packageJson.devDependencies ?? {}, false),
+  ...parseDependencyArray(packageJson.devDependencies ?? {}, true),
 ];

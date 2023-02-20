@@ -1,7 +1,7 @@
 {
-  "name": "typescript-npm-package-template",
+  "name": "node-package-inspector",
   "version": "0.0.0-development",
-  "description": "A template for creating npm packages using TypeScript and VSCode",
+  "description": "A command that allows you to analayze your packages",
   "main": "./lib/index.js",
   "files": [
     "lib/**/*"

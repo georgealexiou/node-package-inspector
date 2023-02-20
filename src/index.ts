@@ -7,7 +7,7 @@ import {
   packageJsonSchema,
   PackageJsonType,
 } from "./types";
-const semver = require("semver");
+import semver from "semver";
 
 const readJsonFile = (pathToPackage: string): PackageJsonType => {
   const fileContent = fs.readFileSync(

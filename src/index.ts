@@ -1,6 +1,6 @@
 import { PackageInfo, PackageInfoBase, PackageInfoWithScore } from "./types";
 import { parseDependencies, readJsonFile } from "./parser";
-import { getReleaseDate, getLatestVersion } from "./npm";
+import { getLatestVersion, getAllReleaseDates } from "./npm";
 import { scoreMapper } from "./score";
 
 const getPackageInfos = (
@@ -8,14 +8,14 @@ const getPackageInfos = (
   withLogs = false
 ): PackageInfo[] =>
   dependencies.map((dependency) => {
+    const allReleaseDates = getAllReleaseDates(dependency.name);
+    const latestVersion = getLatestVersion(dependency.name);
+
     const newDependency = {
       ...dependency,
-      currentVersionDate: getReleaseDate(
-        dependency.name,
-        dependency.currentVersion
-      ),
-      latestVersion: getLatestVersion(dependency.name),
-      latestVersionDate: getReleaseDate(dependency.name, "latest"),
+      currentVersionDate: new Date(allReleaseDates[dependency.currentVersion]),
+      latestVersion,
+      latestVersionDate: new Date(allReleaseDates[latestVersion]),
     };
 
     if (withLogs) {

@@ -6,11 +6,18 @@ const PATH_TO_MOCK__INVALID_PACKAGE =
   "../test/mock-package-invalid-dependency.json";
 
 const FAKE_DATE = "2023-02-11T20:31:23.629Z";
-const FAKE_VERSION = "1.2.3";
+const FAKE_LATEST_VERSION = "1.2.3";
 
 jest.mock("../src/npm", () => ({
-  getReleaseDate: () => new Date(FAKE_DATE),
-  getLatestVersion: () => FAKE_VERSION,
+  getAllReleaseDates: () => ({
+    [FAKE_LATEST_VERSION]: FAKE_DATE,
+    "17.0.1": FAKE_DATE,
+    "2.20.1": FAKE_DATE,
+    "4.2.4": FAKE_DATE,
+    "7.25.0": FAKE_DATE,
+    "27.2.0": FAKE_DATE,
+  }),
+  getLatestVersion: () => FAKE_LATEST_VERSION,
 }));
 
 describe("index", () => {
@@ -23,7 +30,7 @@ describe("index", () => {
         isDevDependency: false,
         currentVersion: "17.0.1",
         currentVersionDate: new Date(FAKE_DATE),
-        latestVersion: FAKE_VERSION,
+        latestVersion: FAKE_LATEST_VERSION,
         latestVersionDate: new Date(FAKE_DATE),
       },
       {
@@ -31,7 +38,7 @@ describe("index", () => {
         isDevDependency: false,
         currentVersion: "2.20.1",
         currentVersionDate: new Date(FAKE_DATE),
-        latestVersion: FAKE_VERSION,
+        latestVersion: FAKE_LATEST_VERSION,
         latestVersionDate: new Date(FAKE_DATE),
       },
       {
@@ -39,7 +46,7 @@ describe("index", () => {
         isDevDependency: true,
         currentVersion: "4.2.4",
         currentVersionDate: new Date(FAKE_DATE),
-        latestVersion: FAKE_VERSION,
+        latestVersion: FAKE_LATEST_VERSION,
         latestVersionDate: new Date(FAKE_DATE),
       },
       {
@@ -47,7 +54,7 @@ describe("index", () => {
         isDevDependency: true,
         currentVersion: "7.25.0",
         currentVersionDate: new Date(FAKE_DATE),
-        latestVersion: FAKE_VERSION,
+        latestVersion: FAKE_LATEST_VERSION,
         latestVersionDate: new Date(FAKE_DATE),
       },
       {
@@ -55,7 +62,7 @@ describe("index", () => {
         isDevDependency: true,
         currentVersion: "27.2.0",
         currentVersionDate: new Date(FAKE_DATE),
-        latestVersion: FAKE_VERSION,
+        latestVersion: FAKE_LATEST_VERSION,
         latestVersionDate: new Date(FAKE_DATE),
       },
     ]);

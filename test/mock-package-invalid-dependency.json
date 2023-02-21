@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react": "toto",
+    "moment": "^2.20.1"
+  }
+}

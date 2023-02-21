@@ -129,4 +129,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# MacOs files
 .DS_Store
+
+# Typescript build
+/lib/

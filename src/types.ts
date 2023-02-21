@@ -13,6 +13,10 @@ export type PackageInfo = PackageInfoBase & {
   latestVersionDate: Date;
 };
 
+export type PackageInfoWithScore = PackageInfo & {
+  score: number;
+};
+
 const semverSchema = z.string().refine((value) => {
   return semver.valid(semver.coerce(value)) !== null;
 }, "Invalid semver version");

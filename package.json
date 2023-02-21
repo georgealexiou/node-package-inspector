@@ -9,6 +9,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "clean": "rm -rf ./lib/",
+    "all": "npm run clean && npm run build && node lib/cli.js",
     "cm": "cz",
     "lint": "eslint ./src/ --fix",
     "prepare": "husky install",
